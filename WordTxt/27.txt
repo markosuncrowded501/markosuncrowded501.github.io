@@ -23,7 +23,7 @@
 鈍い,のろい,2,遲鈍的、鈍的,dull (e.g., a knife), slow (opposite of fast), stupid
 のろのろ,のろのろ,1,慢吞吞地,slowly, sluggishly
 呑気,のんき,1,悠閒、不拘小節,carefree, optimistic, careless
-はい (かん),はい,1,是,yes
+はい,はい,1,是,yes
 灰色,はいいろ,0,灰色,grey, ashen
 俳句,はいく,0,俳句,haiku poetry
 売店,ばいてん,0,販賣部,shop, stand
