@@ -26,7 +26,7 @@
 仕方がない,しかたがない,5,沒辦法,it can't be helped, it's inevitable
 ～時間目,～じかんめ,3,第…節課,~th hour, ~th period
 時間割,じかんわり,0,課表、時間表,timetable, schedule
-〜(日本) 式,しき,1,…式（日本式）,custom,
+式,しき,1,…式（日本式）,custom,
 敷地,しきち,0,佔地、建築用地,site
 敷く,しく,1,鋪、墊,to spread out, to lay out
 茂る,しげる,2,茂盛,to grow thick
