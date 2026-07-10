@@ -3,7 +3,7 @@
 銅,どう,1,銅,copper
 同～,どう～,1,同…,same ~
 ～道,～どう,1,…道,kind of path, road
-どういたしまして (かん),どういたしまして,1,不客氣,you are welcome, don't mention it
+どういたしまして,どういたしまして,1,不客氣,you are welcome, don't mention it
 統一,とういつ,0,統一,unity, consolidation, uniformity
 同格,どうかく,0,同格、地位相等,the same rank, equality, apposition
 峠,とうげ,3,山頂、難關,ridge, (mountain) pass, difficult part
