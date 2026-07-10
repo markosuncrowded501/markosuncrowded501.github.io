@@ -7,7 +7,7 @@
 実物,じつぶつ,0,實物,an actual thing
 しっぽ,しっぽ,3,尾巴,tail (animal)
 実用,じつよう,0,實用,practical use, utility
-しつれいしました (かん),しつれいしました,2,失禮了、對不起,Excuse me., I'm sorry.
+しつれいしました,しつれいしました,2,失禮了、對不起,Excuse me., I'm sorry.
 実例,じつれい,0,實例,example, instance
 失恋,しつれん,0,失戀,broken heart, unrequited love
 指定,してい,0,指定,designation, specification, assignment
@@ -19,12 +19,12 @@
 しぼむ,しぼむ,0,枯萎、癟下去,to wither, to shrivel
 絞る,しぼる,2,擰、勒緊、集中,to press, to wring, to squeeze
 縞,しま,2,條紋,stripe
-～おしまい (おわり),～おしまい,0,結束、完了,end up ~
+～おしまい,～おしまい,0,結束、完了,end up ~
 しみじみ,しみじみ,3,深切地、痛感,keenly, deeply, heartily
 氏名,しめい,1,姓名,full name
 締切,しめきり,0,截止日期,deadline
 締め切る,しめきる,3,截止、封閉,to close, cancel
-しめた (かん),しめた,1,太好了、抓到了（感嘆詞）,I've got it, all right, fine
+しめた,しめた,1,太好了、抓到了（感嘆詞）,I've got it, all right, fine
 地面,じめん,1,地面,ground, earth's surface
 ～車,～しゃ,1,…車,~ car
 ～者,～しゃ,1,…者,person
