@@ -8,7 +8,7 @@
 イコール,いこうる,0,等於,equal
 勇ましい,いさましい,4,勇敢的、威武的,brave, valiant
 衣食住,いしょくじゅう,3,衣食住,food, clothing and shelter
-～いち (にほんいち),～いち,1,第一（日本第一）,No. 1 ~ (in)
+～いち,～いち,1,第一（日本第一）,No. 1 ~ (in)
 いちいち,いちいち,2,逐一地、詳細地,one by one, separately
 一応,いちおう,0,姑且、起碼,tentatively, for the time being
 一段と,いちだんと,0,更加、進一步,by far, greater
