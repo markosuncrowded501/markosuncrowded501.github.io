@@ -348,6 +348,7 @@
     </div>
 
     <!-- 5. 结算结果页面 -->
+      <!-- 5. 结算结果页面 -->
     <div id="result-area" class="hidden">
         <h2 id="result-title" style="color: var(--success-color);">🎉 练习完成！</h2>
         <p style="color:#666; font-size:0.95em;">您已完成当前全部文法练习。</p>
@@ -356,9 +357,10 @@
             <div id="help-list"></div>
         </div>
         <div class="btn-group-vertical">
-            <button id="btn-retry-easy" onclick="retryExcludingHelped()" style="background: #27ae60;">🔁 重新练习 (排除难点)</button>
-            <button id="btn-focus-hard" onclick="focusOnHelped()" style="background: var(--warn-color);">🔥 巩固全部难点</button>
-            <button onclick="location.reload()" style="background: var(--primary-color);">📁 重新加载文法库</button>
+            <button id="btn-retry-easy" onclick="retryExcludingHelped()" style="background: #27ae60;">🔁 重新挑战 (排除难点)</button>
+            <button id="btn-focus-hard" onclick="focusOnHelped()" style="background: var(--warn-color);">🔥 巩固难点</button>
+            <button onclick="switchView('mode-area')" style="background: #0073aa;">⏱️ 换个模式</button>
+            <button onclick="location.reload()" style="background: #666;">📁 重新选择文件</button>
         </div>
     </div>
 </div>
