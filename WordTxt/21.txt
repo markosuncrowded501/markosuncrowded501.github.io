@@ -3,7 +3,7 @@
 集合,しゅうごう,0,集合,gathering, assembly
 習字,しゅうじ,0,習字、書法,penmanship
 修繕,しゅうぜん,0,修繕、修理,repair, mending
-じゅうたん (カーペット),じゅうたん,1,地毯,carpet
+じゅうたん,じゅうたん,1,地毯,carpet
 終点,しゅうてん,0,終點,terminus, last stop (e.g train)
 重点,じゅうてん,0,重點,important point, lay stress on, emphasis
 リズム,りずむ,1,節奏,rhythm
