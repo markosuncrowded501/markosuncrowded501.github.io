@@ -39,7 +39,7 @@
 差し支え,さしつかえ,0,妨礙、不便,hindrance, impediment
 差し引き,さしひき,0,扣除、結算,deduction, balance
 刺身,さしみ,3,生魚片,sliced raw fish
-(かさを～) さす,さす,1,（撐）傘,to open; hold (an umbrella)
+さす,さす,1,（撐）傘,to open; hold (an umbrella)
 流石,さすが,0,不愧是、果然,indeed, truly, as one would expect
 撮影,さつえい,0,攝影、拍照,photographing
 雑音,ざつおん,0,雜音、噪音,noise (jarring, grating)
