@@ -90,12 +90,17 @@
             background: #ffffff !important;
             color: #333 !important;
             border: 2px solid var(--blue-primary);
-            
+            height: 135px !important;
+        min-height: 135px !important;
+        max-height: 135px !important;
         }
         .card.study-mode-card h2 { color: var(--blue-primary); }
         .grammar-card-bg {
             background: linear-gradient(135deg, #0073aa 0%, #005a87 100%);
-            color: white;
+            color: white;   
+        height: 135px !important;
+        min-height: 135px !important;
+        max-height: 135px !important;
         }
         .sentence-display { font-size: 1.4em; line-height: 1.6; color: #1a1a1a; margin-bottom: 15px; }
         .translation-display { font-size: 1em; color: #666; font-style: italic; }
@@ -180,7 +185,7 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 8px;
             margin-top: 5px;
-            max-height: 340px;
+            max-height: 400px;
             overflow-y: auto;
             overflow-x: hidden;
             padding-right: 4px;
@@ -304,9 +309,19 @@
                 height:50px;
                 font-size:18px;
             }
+            .card.study-mode-card {
+        height: 115px !important;
+        min-height: 115px !important;
+        max-height: 115px !important;
+    }
+    .card.grammar-card-bg {
+        height: 115px !important;
+        min-height: 115px !important;
+        max-height: 115px !important;
+    }
             .card { height: 180px; min-height: 180px; max-height: 180px; }
             .options-grid {
-                max-height: 300px;
+                max-height: 360px;
             }
         }
     </style>
