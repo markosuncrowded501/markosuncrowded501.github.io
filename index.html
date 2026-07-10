@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>N2日语单词助手</title>
+    <style>
+        * {
+  box-sizing: border-box;
+  /* 禁止双击放大、双击文字选中 */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+        :root { 
+            --primary-color: #0073aa; 
+            --success-color: #46b450; 
+            --bg-color: #f4f7f9; 
+            --warn-color: #e67e22;
+            --purple-color: #9b59b6;
+            --gray-btn: #eeeeee; 
+            --error-color: #e74c3c;
+            
+            /* 连连看语种专属色 */
+            --jp-bg: #e8f4fd;
+            --jp-border: #bee3f8;
+            --jp-text: #2b6cb0;
+            
+            --zh-bg: #edf7ed;
+            --zh-border: #c6f6d5;
+            --zh-text: #22543d;
+            --selected-color: #e67e22;
+        }
+        
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', "Microsoft YaHei", sans-serif; 
+            background-color: var(--bg-color); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0;
+            padding: 15px; 
+        }
+        #word-game-container { 
+            border: 1px solid #ddd; 
+            padding: 25px; 
+            border-radius: 16px; 
+            width: 100%;
+            max-width: 500px; 
+            min-height: 520px; 
+            text-align: center; 
+            background-color: #ffffff; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        h3 { color: #333; margin-top: 0; margin-bottom: 20px; }
+        .hidden { display: none !important; }
+        
+        .setup-box { 
+            border: 2px dashed #ccc; 
+            padding: 30px 20px; 
+            border-radius: 10px; 
+            margin-bottom: 20px; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        button { 
+            padding: 12px 20px; 
+            background: var(--primary-color); 
+            color: white; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            margin: 5px; 
+            font-size: 16px;
+            transition: opacity 0.2s, transform 0.1s; 
+        }
+        button:active { transform: scale(0.98); }
+        
+        .card { 
+            border: 2px solid #eef2f5; 
+            border-radius: 15px; 
+            padding: 20px; 
+            margin: 15px 0; 
+            background: #fff; 
+            text-align: left; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); 
+        }
+        .card h2 { font-size: 2.5em; color: var(--primary-color); margin: 0; text-align: center; }
+        .card-info p { margin: 8px 0; border-bottom: 1px solid #f0f0f0; padding-bottom: 5px; font-size: 1.1em; color: #444; }
+        
+        .spelling-box {
+            margin: 10px 0 15px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 12px;
+            border: 1px solid #eee;
+        }
+        .spelling-box label { font-size: 0.85em; color: #888; display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="text"] { 
+            width: 100%; 
+            padding: 12px; 
+            font-size: 1.2em; 
+            border: 2px solid #e0e0e0; 
+            border-radius: 10px; 
+            text-align: center; 
+            outline: none; 
+            -webkit-appearance: none; 
+        }
+        input[type="text"]:focus { border-color: var(--primary-color); }
+        #display-word { font-size: 3.5em; font-weight: bold; margin: 15px 0; color: #1a1a1a; word-break: break-all; }
+        #display-word.definition-mode { font-size: 2.2em; color: var(--purple-color); padding: 0 10px; }
+        .feedback-text { height: 20px; font-weight: bold; margin: 8px 0; font-size: 0.9em; }
+        #help-list { 
+            text-align: left; background: #f9f9f9; padding: 15px; border-radius: 8px; 
+            margin: 15px 0; max-height: 120px; overflow-y: auto; font-size: 0.9em; color: #555; border: 1px solid #eee; 
+        }
+        .btn-group-vertical { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+        .progress-text { color: #999; font-size: 0.85em; margin-bottom: 5px; }
+        .mode-btn-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .mode-btn-container button {
+            width: 80%;
+            max-width: 300px;
+            margin: 0;
+        }
+        /* --- 语法/难度测试 乱序字块布局区 --- */
+        .scramble-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin: 12px 0;
+            min-height: 130px;
+        }
+        .char-tile {
+            background: #ffffff;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            width: 42px;
+            height: 42px;
+            line-height: 38px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.15s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .char-tile:active {
+            transform: scale(0.9);
+            background: #eef2f5;
+        }
+        .char-tile.used {
+            opacity: 0.4;
+            background: #e0e0e0;
+            cursor: default;
+            pointer-events: none;
+        }
+        .char-tile.correct-hidden {
+            visibility: hidden;
+            pointer-events: none;
+        }
+        /* --- 连连看样式 --- */
+        .match-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 20px 0;
+        }
+        .match-card {
+            border-radius: 12px;
+            padding: 15px 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 75px;
+            word-break: break-all;
+            border: 2px solid transparent;
+        }
+        .match-card.lang-word { background-color: var(--jp-bg); border-color: var(--jp-border); color: var(--jp-text); }
+        .match-card.lang-word:hover { border-color: var(--primary-color); }
+        .match-card.lang-def { background-color: var(--zh-bg); border-color: var(--zh-border); color: var(--zh-text); }
+        .match-card.lang-def:hover { border-color: var(--success-color); }
+        .match-card.selected { border-color: var(--selected-color) !important; background-color: #fff9f3 !important; color: var(--selected-color) !important; transform: scale(1.02); }
+        .match-card.invisible { visibility: hidden; pointer-events: none; }
+        /* ========== 新增：虚拟九宫格数字键盘样式 ========== */
+        .num-input-box{
+            margin:10px 0;
+        }
+        #numFileInput{
+            text-align:center;
+            font-size:18px;
+            letter-spacing:4px;
+        }
+        .numpad-wrap{
+            margin-top:12px;
+        }
+        .numpad-row{
+            display:flex;
+            gap:6px;
+            justify-content:center;
+            margin:6px 0;
+        }
+        .num-key{
+            width:60px;
+            height:60px;
+            font-size:22px;
+            padding:0;
+            background:#f0f4f8;
+            color:#222;
+        }
+        .num-key.func{
+            background:#ddd;
+        }
+        .load-txt-btn{
+            background:#5256A4;
+            width:100%;
+            margin-top:8px;
+        }
+        @media (max-width: 480px) {
+            #word-game-container { padding: 15px; }
+            .card h2 { font-size: 2em; }
+            .char-tile { width: 38px; height: 38px; line-height: 34px; font-size: 1.1em; }
+            .match-card { font-size: 0.95em; padding: 12px 4px; min-height: 70px; }
+            .num-key{
+                width:50px;
+                height:50px;
+                font-size:18px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="word-game-container">
+    <div id="setup-area">
+        <h3>N2日语單詞助手</h3>
+        <!-- 新增：虚拟数字键盘读取WordTxt文件夹txt -->
+        <div class="setup-box">
+            <p style="margin:0 0 10px 0;color:#666;">输入数字加载 WordTxt/数字.txt</p>
+            <div class="num-input-box">
+                <input type="text" id="numFileInput" readonly placeholder="...">
+            </div>
+            <div class="numpad-wrap">
+                <div class="numpad-row">
+                    <button class="num-key" data-val="1">1</button>
+                    <button class="num-key" data-val="2">2</button>
+                    <button class="num-key" data-val="3">3</button>
+                </div>
+                <div class="numpad-row">
+                    <button class="num-key" data-val="4">4</button>
+                    <button class="num-key" data-val="5">5</button>
+                    <button class="num-key" data-val="6">6</button>
+                </div>
+                <div class="numpad-row">
+                    <button class="num-key" data-val="7">7</button>
+                    <button class="num-key" data-val="8">8</button>
+                    <button class="num-key" data-val="9">9</button>
+                </div>
+                <div class="numpad-row">
+                    <button class="num-key func" data-val="0">0</button>
+                    <button class="num-key func" data-val="del">←</button>
+                    <button class="num-key func" data-val="clear">清空</button>
+                </div>
+            </div>
+            <button class="load-txt-btn" id="fetchWordTxtBtn">加载对应单词本</button>
+            <div style="margin-top:15px;border-top:1px solid #ddd;padding-top:15px;width:100%;">
+                <p style="font-size: 0.8em; color: #888; margin:0 0 10px 0;">或手动上传本地txt：格式：單詞,讀音,聲調,含義...</p>
+                <input type="file" id="fileInput" accept=".txt">
+            </div>
+        </div>
+    </div>
+    <div id="mode-area" class="hidden">
+        <h3>已加载 <span id="total-count">0</span> 个单词</h3>
+        <div class="mode-btn-container">
+            <button onclick="startMode('study')">📖 学习模式</button>
+            <button onclick="startMode('challenge')">🎯 假名挑战</button>
+            <button onclick="startMode('hard-test')" style="background: var(--purple-color);">📝 书写测试</button>
+            <button onclick="startMode('match')" style="background: var(--purple-color);">🧩 连线消除</button>
+        </div>
+    </div>
+    <div id="study-area" class="hidden">
+        <div class="progress-text">学习进度: <span id="study-progress">0</span> / <span id="study-total">0</span></div>
+        <div class="card" id="card-content"></div>
+        
+        <div class="spelling-box">
+            <label>✍️ 拼写练习 (输入假名/罗马音)</label>
+            <input type="text" id="studyAnswerInput" placeholder="输入假名自动跳转..." autocomplete="off">
+            <div id="study-feedback" class="feedback-text"></div>
+        </div>
+        <div style="display:flex; gap:10px;">
+            <button onclick="prevCard()" style="background:#888; flex:1;">上一张</button>
+            <button onclick="nextCard()" style="flex:1;">下一张</button>
+        </div>
+        <button onclick="switchView('mode-area')" style="background:#666; width:100%; margin-top:10px; font-size: 14px;">返回菜单</button>
+    </div>
+    <div id="challenge-area" class="hidden">
+        <div class="progress-text"><span id="challenge-mode-title">挑战</span>进度: <span id="challenge-progress">0</span> / <span id="challenge-total">0</span></div>
+        <div id="display-word">---</div>
+        <div id="answer-hint-card" class="card hidden"></div>
+        
+        <div class="spelling-box">
+            <div id="scramble-test-zone">
+                <label>🎯 请点击下方字块拼出完整单词（含汉字/假名）</label>
+                <input type="text" id="scrambleAnswerInput" placeholder="请依次选择下方字块..." readonly autocomplete="off">
+                <div id="hard-scramble-container" class="scramble-container"></div>
+            </div>
+            
+            <div id="typing-test-zone" class="hidden">
+                <label>✍️ 请输入纯假名或罗马音进行拼写确认</label>
+                <input type="text" id="challengeAnswerInput" placeholder="输入假名..." autocomplete="off">
+            </div>
+            
+            <div id="challenge-feedback" class="feedback-text"></div>
+        </div>
+        
+        <button id="show-answer-btn" onclick="showHelpAnswer()" style="background: var(--gray-btn); color: #666; width: 100%; margin-top: 10px; border: 1px solid #ddd;">💡 看答案</button>
+    </div>
+    <div id="match-area" class="hidden">
+        <div class="progress-text">已消除单词: <span id="match-cleared-progress">0</span> / <span id="match-game-total">0</span></div>
+        <p style="color:#888; font-size:0.8em; margin: 5px 0 10px 0;">每轮随机抽取 4 个，中日语可任意顺序双向连线</p>
+        
+        <div class="match-grid" id="match-grid-container"></div>
+        <div id="match-feedback" class="feedback-text"></div>
+        <button onclick="switchView('mode-area')" style="background:#666; width:100%; margin-top:20px; font-size: 14px;">返回菜单</button>
+    </div>
+    <!-- 修改后的结算区域 -->
+    <div id="result-area" class="hidden">
+        <h2 id="result-title" style="color: var(--success-color);">🎉 通关！</h2>
+        <div id="helped-words-container" class="hidden">
+            <p style="font-weight: bold; color: var(--warn-color); margin-bottom: 5px;">难词回顾：</p>
+            <div id="help-list"></div>
+        </div>
+        <div class="mode-btn-container">
+            <button id="btn-retry-easy" onclick="retryExcludingHelped()" style="background: #27ae60;">🔁 重新挑战 (排除难词)</button>
+            <button id="btn-focus-hard" onclick="focusOnHelped()" style="background: var(--warn-color);">🔥 巩固难词</button>
+            <button id="btn-change-mode" onclick="switchView('mode-area')" style="background: var(--primary-color);">🧭 换个模式</button>
+            <button onclick="location.reload()" style="background: #888;">📁 重新选择文件</button>
+        </div>
+    </div>
+</div>
+<script>
+(function() {
+    let originalWordList = []; 
+    let challengeQueue = [];   
+    let currentIndex = 0;
+    let helpedKanjiSet = new Set(); 
+    let currentMode = '';
+    let matchRemainingWords = [];
+    let matchFirstSelectedCard = null;
+    const INTERVALS = [3, 8, 11]; 
+    const TARGET_TILE_COUNT = 18;
+    const romajiMap = {
+        'a':'あ','i':'い','u':'う','e':'え','o':'お',
+'ka':'か','ki':'き','ku':'く','ke':'け','ko':'こ',
+'sa':'さ','shi':'し','su':'す','se':'せ','so':'そ',
+'ta':'た','chi':'ち','tu':'つ','te':'て','to':'と',
+'na':'な','ni':'に','nu':'ぬ','ne':'ね','no':'の',
+'ha':'は','hi':'ひ','hu':'ふ','he':'へ','ho':'ほ',
+'ma':'ま','mi':'み','mu':'む','me':'め','mo':'も',
+'ya':'や','yu':'ゆ','yo':'よ',
+'ra':'ら','ri':'り','ru':'る','re':'れ','ro':'ろ',
+'wa':'わ','wo':'を','nn':'ん',
+'ga':'が','gi':'ぎ','gu':'ぐ','ge':'げ','go':'ご',
+'za':'ざ','ji':'じ','zu':'ず','ze':'ぜ','zo':'ぞ',
+'da':'だ','di':'ぢ','du':'づ','de':'で','do':'ど',
+'ba':'ば','bi':'び','bu':'ぶ','be':'べ','bo':'ぼ',
+'pa':'ぱ','pi':'ぴ','pu':'ぷ','pe':'ぺ','po':'ぽ',
+'kya':'きゃ','kyu':'きゅ','kyo':'きょ',
+'sha':'しゃ','shu':'しゅ','sho':'しょ',
+'cha':'ちゃ','chu':'ちゅ','cho':'ちょ',
+'nyo':'にゃ','nyu':'にゅ','nyo':'にょ',
+'hya':'ひゃ','hyu':'ひゅ','hyo':'ひょ',
+'mya':'みゃ','myu':'みゅ','myo':'みょ',
+'rya':'りゃ','ryu':'りゅ','ryo':'りょ',
+'gya':'ぎゃ','gyu':'ぎゅ','gyo':'ぎょ',
+'jya':'じゃ','jyu':'じゅ','jyo':'じょ',
+'bya':'びゃ','byu':'びゅ','byo':'びょ',
+'pya':'ぴゃ','pyu':'ぴゅ','pyo':'ぴょ',
+'shou':'しょう','chou':'ちょう','jyou':'じょう',
+'rye':'りぇ','ddi':'でぃ','fa':'ふぁ'
+    };
+    // ========== 新增：虚拟数字键盘逻辑 ==========
+    const numInput = document.getElementById('numFileInput');
+    const numKeys = document.querySelectorAll('.num-key');
+    const loadTxtBtn = document.getElementById('fetchWordTxtBtn');
+    numKeys.forEach(key=>{
+        key.addEventListener('click',()=>{
+            const val = key.dataset.val;
+            if(val === 'clear'){
+                numInput.value = '';
+            }else if(val === 'del'){
+                numInput.value = numInput.value.slice(0,-1);
+            }else{
+                numInput.value += val;
+            }
+        })
+    })
+    // 从WordTxt文件夹加载指定数字txt
+    loadTxtBtn.addEventListener('click',async ()=>{
+        const num = numInput.value.trim();
+        if(!num){
+            alert("请先输入文件编号！");
+            return;
+        }
+        const txtUrl = `./WordTxt/${num}.txt`;
+        try{
+            const res = await fetch(txtUrl);
+            if(!res.ok) throw new Error("文件不存在");
+            const text = await res.text();
+            parseTxtData(text);
+        }catch(err){
+            alert(`加载失败：${err.message}\n请确认仓库WordTxt文件夹下存在 ${num}.txt`);
+        }
+    })
+    // 解析txt共用函数（上传文件/远程加载复用）
+    function parseTxtData(rawText){
+        originalWordList = rawText.split(/\r?\n/)
+            .filter(l => l.includes(','))
+            .map(l => {
+                const p = l.split(',').map(s => s.trim());
+                let rawDefinition = p.slice(3).filter(x => x).join('、');
+                let cleanDefinition = rawDefinition.replace(/[^\u4e00-\u9fa5\u3001\uff0c\uff08\uff09\u2014]/g, '').trim();
+                cleanDefinition = cleanDefinition.replace(/、{2,}/g, '');
+                cleanDefinition = cleanDefinition.replace(/^、|、$/g, '').trim();
+                if (!cleanDefinition) cleanDefinition = rawDefinition;
+                return { 
+                    id: Math.random().toString(36).substr(2, 9), 
+                    kanji: p[0], 
+                    kana: p[1], 
+                    accent: p[2] || '0', 
+                    definition: cleanDefinition 
+                };
+            });
+        if(originalWordList.length > 0) {
+            document.getElementById('total-count').innerText = originalWordList.length;
+            switchView('mode-area');
+        }else{
+            alert("txt内无有效单词数据，请检查格式");
+        }
+    }
+    // 原有本地文件上传逻辑
+    const fileInput = document.getElementById('fileInput');
+    fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            parseTxtData(event.target.result);
+        };
+        reader.readAsText(file);
+    });
+    window.startMode = function(mode, customList = null) {
+        currentMode = mode;
+        currentIndex = 0;
+        if (!customList) helpedKanjiSet.clear();
+        
+        const targetList = customList || originalWordList;
+        
+        if (mode === 'challenge' || mode === 'hard-test') {
+            challengeQueue = targetList.map(w => ({ ...w }));
+            document.getElementById('challenge-mode-title').innerText = mode === 'hard-test' ? '书写测试' : '挑战';
+            switchView('challenge-area');
+            renderChallenge();
+        } else if (mode === 'match') {
+            matchRemainingWords = [...targetList];
+            shuffleArray(matchRemainingWords);
+            document.getElementById('match-game-total').innerText = targetList.length;
+            document.getElementById('match-cleared-progress').innerText = 0;
+            switchView('match-area');
+            nextMatchRound();
+        } else {
+            switchView('study-area');
+            renderStudy();
+        }
+    };
+    // --- 学习模式逻辑 ---
+    function renderStudy() {
+        const w = originalWordList[currentIndex];
+        const studyInput = document.getElementById('studyAnswerInput');
+        document.getElementById('study-progress').innerText = currentIndex + 1;
+        document.getElementById('study-total').innerText = originalWordList.length;
+        document.getElementById('study-feedback').innerText = "";
+        studyInput.value = "";
+        
+        document.getElementById('card-content').innerHTML = `
+            <h2>${w.kanji}</h2>
+            <div class="card-info">
+                <p><strong>读音：</strong>${w.kana}</p>
+                <p><strong>声调：</strong>${w.accent}</p>
+                <p><strong>释义：</strong>${w.definition}</p>
+            </div>
+        `;
+        setTimeout(() => studyInput.focus(), 50);
+    }
+    document.getElementById('studyAnswerInput').addEventListener('input', function() {
+        const userVal = cleanString(romajiToKana(this.value.trim()));
+        const targetVal = cleanString(originalWordList[currentIndex].kana);
+        
+        if (userVal !== "" && userVal === targetVal) {
+            const fb = document.getElementById('study-feedback');
+            fb.innerText = "正确！";
+            fb.style.color = "#46b450";
+            setTimeout(nextCard, 200);
+        }
+    });
+    window.nextCard = () => { 
+        if(currentIndex < originalWordList.length - 1) { 
+            currentIndex++; 
+            renderStudy(); 
+        } else { 
+            finishSession("📖 学习模式已完成！"); 
+        } 
+    };
+    
+    window.prevCard = () => { 
+        if(currentIndex > 0) { 
+            currentIndex--; 
+            renderStudy(); 
+        }
+    };
+    // --- 混淆字块生成逻辑 ---
+    function generateScrambledTiles(correctAnswer) {
+        let chars = correctAnswer.split('');
+        if (chars.length < TARGET_TILE_COUNT && originalWordList.length > 0) {
+            let pool = originalWordList
+                .map(w => w.kanji + w.kana)
+                .join('')
+                .split('');
+            if (pool.length === 0) pool = "するないたてますればから漢字日常".split(''); 
+            while (chars.length < TARGET_TILE_COUNT && pool.length > 0) {
+                const randIndex = Math.floor(Math.random() * pool.length);
+                chars.push(pool.splice(randIndex, 1)[0]);
+            }
+        }
+        shuffleArray(chars);
+        return chars;
+    }
+    function initHardScrambleZone(answer) {
+        const zone = document.getElementById('hard-scramble-container');
+        const input = document.getElementById('scrambleAnswerInput');
+        zone.innerHTML = '';
+        input.value = '';
+        const tiles = generateScrambledTiles(answer);
+        tiles.forEach(char => {
+            const btn = document.createElement('div');
+            btn.className = 'char-tile';
+            btn.innerText = char;
+            btn.onclick = () => {
+                const currentLength = input.value.length;
+                if (answer[currentLength] === char) {
+                    input.value += char;
+                    btn.classList.add('correct-hidden');
+                    
+                    if (input.value.trim() === answer.trim()) {
+                        document.getElementById('challenge-feedback').innerText = "正确！";
+                        document.getElementById('challenge-feedback').style.color = "var(--success-color)";
+                        currentIndex++;
+                        setTimeout(() => {
+                            renderChallenge();
+                        }, 220);
+                    }
+                } else {
+                    input.value += char;
+                    btn.classList.add('used');
+                    document.getElementById('challenge-feedback').innerText = "回答错误";
+                    document.getElementById('challenge-feedback').style.color = "var(--error-color)";
+                }
+            };
+            zone.appendChild(btn);
+        });
+        input.onclick = () => {
+            input.value = "";
+            document.getElementById('challenge-feedback').innerText = "";
+            zone.querySelectorAll('.char-tile').forEach(t => {
+                t.classList.remove('used', 'correct-hidden');
+            });
+        };
+    }
+    // --- 核心渲染 ---
+    function renderChallenge() {
+        if (currentIndex >= challengeQueue.length) {
+            finishSession(currentMode === 'hard-test' ? "📝 书写测试完成！" : "🎯 挑战成功！");
+            return;
+        }
+        const w = challengeQueue[currentIndex];
+        const wordDisplay = document.getElementById('display-word');
+        
+        document.getElementById('challenge-feedback').innerText = "";
+        document.getElementById('answer-hint-card').classList.add('hidden');
+        document.getElementById('show-answer-btn').classList.remove('hidden');
+        if (currentMode === 'hard-test') {
+            wordDisplay.innerText = w.definition;
+            wordDisplay.classList.add('definition-mode'); 
+            
+            document.getElementById('scramble-test-zone').classList.remove('hidden');
+            document.getElementById('typing-test-zone').classList.add('hidden');
+            initHardScrambleZone(w.kanji);
+        } else {
+            wordDisplay.innerText = w.kanji;
+            wordDisplay.classList.remove('definition-mode');
+            document.getElementById('scramble-test-zone').classList.add('hidden');
+            document.getElementById('typing-test-zone').classList.remove('hidden');
+            document.getElementById('challengeAnswerInput').value = "";
+            setTimeout(() => document.getElementById('challengeAnswerInput').focus(), 50);
+        }
+        document.getElementById('challenge-progress').innerText = currentIndex + 1;
+        document.getElementById('challenge-total').innerText = challengeQueue.length;
+    }
+    // 键盘拼写输入事件绑定 (针对常规挑战模式)
+    document.getElementById('challengeAnswerInput').addEventListener('input', function() {
+        const userVal = cleanString(romajiToKana(this.value.trim()));
+        const targetVal = cleanString(challengeQueue[currentIndex].kana);
+        
+        if (userVal !== "" && userVal === targetVal) {
+            const fb = document.getElementById('challenge-feedback');
+            fb.innerText = "正确！";
+            fb.style.color = "#46b450";
+            currentIndex++;
+            setTimeout(renderChallenge, 220);
+        }
+    });
+    window.showHelpAnswer = function() {
+        const w = challengeQueue[currentIndex];
+        helpedKanjiSet.add(w.kanji); 
+        const hintCard = document.getElementById('answer-hint-card');
+        hintCard.innerHTML = `<h2>${w.kanji}</h2><div class="card-info"><p>读音：${w.kana}</p><p>声调：${w.accent}</p><p>释义：${w.definition}</p></div>`;
+        hintCard.classList.remove('hidden');
+        
+        requeueWord(w);
+    };
+    function requeueWord(wordObj) {
+        const baseK = wordObj.kanji;
+        challengeQueue = challengeQueue.filter((item, idx) => idx <= currentIndex || item.kanji !== baseK);
+        const remainingCount = challengeQueue.length - (currentIndex + 1);
+        
+        INTERVALS.forEach(gap => {
+            let actualGap = gap;
+            if (actualGap > remainingCount) actualGap = remainingCount;
+            const targetPos = currentIndex + 1 + actualGap;
+            challengeQueue.splice(targetPos, 0, { ...wordObj });
+        });
+        document.getElementById('challenge-total').innerText = challengeQueue.length;
+    }
+    // --- 连连看核心运行逻辑 ---
+    function nextMatchRound() {
+        matchFirstSelectedCard = null;
+        document.getElementById('match-feedback').innerText = "";
+        if (matchRemainingWords.length === 0) {
+            finishSession("🧩 连线消除全部通关！");
+            return;
+        }
+        let currentRoundWords = matchRemainingWords.splice(0, 4);
+        let mixedPool = [];
+        currentRoundWords.forEach(w => {
+            mixedPool.push({ id: w.id, text: w.kanji, type: 'word', rawObj: w });
+            mixedPool.push({ id: w.id, text: w.definition, type: 'def', rawObj: w });
+        });
+        let attempts = 0;
+        while (attempts < 20) {
+            shuffleArray(mixedPool);
+            if (!hasNeighborPairs(mixedPool)) break; 
+            attempts++;
+        }
+        const gridContainer = document.getElementById('match-grid-container');
+        gridContainer.innerHTML = "";
+        for (let i = 0; i < 8; i++) {
+            if (mixedPool[i]) {
+                gridContainer.appendChild(createMatchCardElement(mixedPool[i]));
+            } else {
+                gridContainer.appendChild(createMatchPlaceholder());
+            }
+        }
+    }
+    function hasNeighborPairs(pool) {
+        for (let i = 0; i < pool.length; i++) {
+            if (i % 2 === 0 && i + 1 < pool.length) {
+                if (pool[i].id === pool[i+1].id) return true;
+            }
+            if (i + 2 < pool.length) {
+                if (pool[i].id === pool[i+2].id) return true;
+            }
+        }
+        return false;
+    }
+    function createMatchCardElement(item) {
+        const card = document.createElement('div');
+        card.className = `match-card lang-${item.type}`;
+        card.innerText = item.text;
+        card.dataset.id = item.id;
+        card.dataset.type = item.type;
+        card.customWordData = item.rawObj;
+        card.addEventListener('click', function() {
+            handleMatchCardClick(card);
+        });
+        return card;
+    }
+    function createMatchPlaceholder() {
+        const card = document.createElement('div');
+        card.className = 'match-card invisible';
+        return card;...
