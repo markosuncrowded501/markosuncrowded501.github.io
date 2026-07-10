@@ -23,7 +23,7 @@
 見舞う,みまう,0,探望、遭受,to ask after (health), to visit
 未満,みまん,0,未滿,less than, insufficient
 名字,みょうじ,1,姓氏,surname, family name
-ミリ (メートル),みり,1,公釐,milli-
+ミリ,みり,1,公釐,milli-
 民間,みんかん,0,民間,private, civilian
 民主～,みんしゅ～,1,民主…,democratic
 民謡,みんよう,0,民謠,folk song, popular song
