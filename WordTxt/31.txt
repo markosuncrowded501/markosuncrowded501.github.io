@@ -30,7 +30,7 @@
 ペンチ,ぺんち,1,老虎鉗,pliers (lit: pinchers)
 ～歩,～ほ,1,…步,step, pace
 ～ぽい,～ぽい,1,容易…、帶有…傾向,~ish
-～ほう (ひかく),～ほう,1,…方（比較）,(in comparison)
+～ほう,～ほう,1,…方（比較）,(in comparison)
 防～,ぼう～,1,防…,~ prevention
 望遠鏡,ぼうえんきょう,0,望遠鏡,telescope
 方角,ほうがく,0,方位,direction, way
