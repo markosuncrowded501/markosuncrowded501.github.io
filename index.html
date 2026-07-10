@@ -383,7 +383,13 @@
         <button onclick="switchView('mode-area')" style="background:#666; width:100%; margin-top:10px; font-size: 14px;">返回菜单</button>
     </div>
     <!-- 4. 接续变形测试区域（重构结构，底部按钮固定） -->
-    <div id="setsuzoku-area" class="hidden">
+    <div id="setsuzoku-area" display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+#optionsPanel {
+    margin-bottom: auto;
+        >
         <!-- 中间可滚动内容区 -->
         <div class="setsuzoku-content-wrap">
             <div class="progress-text"><span id="setsuzoku-mode-title">接续测试</span>进度: <span id="setsuzoku-progress">0</span> / <span id="setsuzoku-total">0</span></div>
