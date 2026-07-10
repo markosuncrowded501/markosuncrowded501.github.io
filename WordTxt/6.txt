@@ -1,4 +1,4 @@
-だいいち (とりわけ),だいいち,1,第一,first, foremost,&nbsp;&nbsp;#1
+だいいち,だいいち,1,第一,first, foremost,&nbsp;&nbsp;#1
 大学院,だいがくいん,4,研究所,graduate school
 大工,だいく,1,木匠,carpenter
 体系,たいけい,0,體系,system, organization
