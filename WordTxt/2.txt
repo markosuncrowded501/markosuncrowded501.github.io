@@ -33,7 +33,7 @@
 資料,しりょう,1,資料,materials, data
 汁,しる,1,汁、湯汁,juice, soup
 素人,しろうと,1,外行、門外漢,layman, amateur, novice
-しわ (かおの～),しわ,0,皺紋（臉上的）,wrinkles, creases
+しわ,しわ,0,皺紋（臉上的）,wrinkles, creases
 芯,しん,1,芯、中心,core, heart, wick
 新幹線,しんかんせん,3,新幹線,Shinkansen, "Bullet Train"
 真空,しんくう,0,真空,vacuum
